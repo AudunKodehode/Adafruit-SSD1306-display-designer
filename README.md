@@ -1,8 +1,7 @@
 .net WindowsForms app: 
 Applcation to design layout and style on SSD1306 along with Arduino code.
 
-![Alt Text](https://github.com/YourUsername/YourRepository/raw/main/Preview.png)
-
+![Alt Text](https://github.com/AudunKodehode/Adafruit-SSD1306-display-designer/raw/main/Preview.png)
 
 
 
