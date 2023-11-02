@@ -1,3 +1,13 @@
+.net WindowsForms app: 
+Applcation to design layout and style on SSD1306 along with Arduino code.
+
+
+
+
+
+Arduino: 
+
+
 Code to develop and preview content on SSD1306 display using serial.
 #include <Adafruit_GFX.h>  
 #include <Adafruit_SSD1306.h> 
