@@ -8,6 +8,7 @@
 #define OLED_ADDRESS 0x3C  // I2C address of your SSD1306 display
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_ADDRESS);
 bool invert = false;
+bool disconnected = true;
 void setup() {
   Serial.begin(9600);
   Wire.begin(SDA_PIN, SCL_PIN);
@@ -15,8 +16,12 @@ void setup() {
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
   display.clearDisplay();
-  display.display();
+  disconnect();
+  while (disconnected == true) {
+    waitingForConnect();
+  }
 }
+
 void loop() {
   if (Serial.available() > 0) {
     char delimiter = '\n';  // The delimiter character (change as needed)
@@ -38,12 +43,27 @@ void loop() {
         dc(x, y, r, c);
         Serial.println("Drawing circle X:" + String(x) + ", Y:" + String(y) + ", radius: " + String(r) + ", color: " + String(c));
       }
+      if (type == "fc" || type == "FC" || type == "Fc" || type == "fC") {
+        int x, y, r, c;
+        int numValues = sscanf(data.c_str(), "%d,%d,%d,%d", &x, &y, &r, &c);
+        fc(x, y, r, c);
+        Serial.println("Drawing circle X:" + String(x) + ", Y:" + String(y) + ", radius: " + String(r) + ", color: " + String(c));
+      }
+
+
       if (type == "dr" || type == "DR" || type == "Dr" || type == "dR") {
         int x, y, w, h, r, c;
         int numValues = sscanf(data.c_str(), "%d,%d,%d,%d,%d,%d", &x, &y, &w, &h, &r, &c);
         dr(x, y, w, h, r, c);
         Serial.println("Drawing rectangle X:" + String(x) + ", Y:" + String(y) + ", width: " + String(w) + ", height: " + String(h) + ", radius: " + String(r) + ", color: " + String(c));
       }
+      if (type == "fr" || type == "FR" || type == "Fr" || type == "fR") {
+        int x, y, w, h, r, c;
+        int numValues = sscanf(data.c_str(), "%d,%d,%d,%d,%d,%d", &x, &y, &w, &h, &r, &c);
+        fr(x, y, w, h, r, c);
+        Serial.println("Filling rectangle X:" + String(x) + ", Y:" + String(y) + ", width: " + String(w) + ", height: " + String(h) + ", radius: " + String(r) + ", color: " + String(c));
+      }
+
       if (type == "dl" || type == "DL" || type == "Dl" || type == "dL") {
         int x, y, x2, y2, c;
         int numValues = sscanf(data.c_str(), "%d,%d,%d,%d,%d,%d", &x, &y, &x2, &y2, &c);
@@ -86,12 +106,20 @@ void loop() {
         pt(x, y, c, tz, data);
         Serial.println("Print text :" + String(x) + ", Y:" + String(y) + ", color: " + String(c) + ", size: " + String(tz) + ",Text: " + data);
       }
-      if (type == "dt" || type == "DT" || type == "Dt" || type == "dT") {
+      if (type == "FT" || type == "ft" || type == "Ft" || type == "fT") {
+        int x0, y0, x1, y1, x2, y2, c;
+        int numValues = sscanf(data.c_str(), "%d,%d,%d,%d,%d,%d,%d", &x0, &y0, &x1, &y1, &x2, &y2, &c);
+        ft(x0, y0, x1, y1, x2, y2, c);
+        Serial.println("Fill triangle, X0: " + String(x0) + ", Y0: " + String(y0) + ", X1: " + String(x1) + ", Y1: " + String(y1) + ", X2: " + String(x2) + ", Y2: " + String(y2) + ", Color: " + String(c));
+      }
+      if (type == "DT" || type == "dt" || type == "Dt" || type == "dT") {
         int x0, y0, x1, y1, x2, y2, c;
         int numValues = sscanf(data.c_str(), "%d,%d,%d,%d,%d,%d,%d", &x0, &y0, &x1, &y1, &x2, &y2, &c);
         dt(x0, y0, x1, y1, x2, y2, c);
-        Serial.println("Drawing triangle, X0: " + String(x0) + ", Y0: " + String(y0) + ", X1: " + String(x1) + ", Y1: " + String(y1) + ", X2: " + String(x2) + ", Y2: " + String(y2) + ", Color: " + String(c));
+        Serial.println("Draw triangle, X0: " + String(x0) + ", Y0: " + String(y0) + ", X1: " + String(x1) + ", Y1: " + String(y1) + ", X2: " + String(x2) + ", Y2: " + String(y2) + ", Color: " + String(c));
       }
+
+
       if (type == "db" || type == "DB" || type == "Db" || type == "dB") {
         int x, y, w, h, c;
         int numValues = sscanf(data.c_str(), "%d,%d,%d,%d,%d,%d,%d", &x, &y, &w, &h, &c);
@@ -104,16 +132,54 @@ void loop() {
         db(x, y, w, h, c, dataAsUint8);
         Serial.println("Draw bitmap, X: " + String(x) + ", Y: " + String(y) + ", Width: " + String(w) + ", height: " + String(h) + ", Color: " + String(c) + ", Data: " + data);
       }
+      if (type == "xx") {
+        disconnected = true;
+        disconnect();
+        while (disconnected == true) {
+          waitingForConnect();
+        }
+      }
     }
   }
 }
+
+
+void waitingForConnect() {
+  if (Serial.available() > 0) {
+    char delimiter = '\n';
+    String data = Serial.readStringUntil(delimiter);
+    if (data == "c") {
+      disconnected = false;
+      connected();
+      Serial.println("c");
+    }
+  }
+}
+void disconnect() {
+  display.clearDisplay();
+  display.invertDisplay(false);
+  nt(0, 0, 1, 2, "Waiting");
+  ct("for");
+  nl();
+  ct("connection");
+}
+
+
+void connected() {
+  cd();
+}
+
 void db(int x, int y, int width, int height, uint16_t color, const uint8_t* bitmap) {
   display.drawBitmap(x, y, bitmap, width, height, color);
   display.display();
 }
 
-void dt(int x0, int y0, int x1, int y1, int x2, int y2, uint16_t color) {
+void ft(int x0, int y0, int x1, int y1, int x2, int y2, uint16_t color) {
   display.fillTriangle(x0, y0, x1, y1, x2, y2, color);
+  display.display();
+}
+void dt(int x0, int y0, int x1, int y1, int x2, int y2, uint16_t color) {
+  display.drawTriangle(x0, y0, x1, y1, x2, y2, color);
   display.display();
 }
 void pt(int x, int y, uint16_t color, int textSize, String text) {
@@ -121,6 +187,7 @@ void pt(int x, int y, uint16_t color, int textSize, String text) {
   display.setTextSize(textSize);
   display.setTextColor(color);
   display.print(text);
+  display.display();
 }
 void nt(int x, int y, uint16_t color, int textSize, String text) {  //
   display.setCursor(x, y);
@@ -145,8 +212,18 @@ void dc(int x, int y, int radius, uint16_t color) {  //
   display.drawCircle(x, y, radius, color);
   display.display();
 }
+void fc(int x, int y, int radius, uint16_t color) {  //
+  display.fillCircle(x, y, radius, color);
+  display.display();
+}
+
+
 void dr(int x, int y, int w, int h, int r, uint16_t color) {  //
   display.drawRoundRect(x, y, w, h, r, color);
+  display.display();
+}
+void fr(int x, int y, int w, int h, int r, uint16_t color) {  //
+  display.fillRoundRect(x, y, w, h, r, color);
   display.display();
 }
 void dl(int x, int y, int x2, int y2, uint16_t color) {  //
