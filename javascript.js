@@ -3,7 +3,7 @@ let ipAddress = "10.0.0.17";
 
 function command(command) {
     if (command === "cd") {
-      fetch("http://"+ipAddress, {
+      fetch("https://"+ipAddress, {
         method: "POST",
         body: JSON.stringify(data),
       })
