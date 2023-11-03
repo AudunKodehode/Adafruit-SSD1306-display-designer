@@ -4,14 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css.css">
+    <script src="javascript.js" defer></script>
     <title>SSD1306 designer</title>
 </head>
 <body>
     <h1>ESP8266 Display Designer</h1>
-    <p>Before you start, upload <a href="">this</a> code to ESP8266</p>
+    <p>Before you start, upload <a href="https://github.com/AudunKodehode/Adafruit-SSD1306-display-designer/blob/wifi/Adafruit_SSD1306_WIFI_Sandbox.ino/Adafruit_SSD1306_WIFI_Sandbox.ino.ino">this</a> code to ESP8266</p>
     <br>
-    <label for="ipaddressInput">IP:</label>
-    <input id="ipaddressInput" type="text" placeholder="IP-adress from ESP8266">
+    <div class="ip">
+        <label for="ipaddressInput">IP:</label>
+        <input id="ipaddressInput" type="text" placeholder="IP-adress from ESP8266">
+        <button onclick="setIP()">Set IP</button>
+    </div>
+
+    <p>Make sure you're on the same network.</p>
+<button onclick="command('cd')">Clear Display</button>
+
+
 
 </body>
 </html>
