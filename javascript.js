@@ -1,5 +1,6 @@
 const ipaddressInput = document.getElementById("ipaddressInput");
 let ipAddress = "10.0.0.17";
+
 function command(command) {
     if (command === "cd") {
       fetch("http://"+ipAddress, {
