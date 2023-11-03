@@ -7,7 +7,7 @@ ESP8266WebServer server(80);
 const char* html = R"(
 <!DOCTYPE HTML>
 <html>
-<p>Visit <a href="">this</a> site. 
+<p>Visit <a href='https://audunkodehode.github.io/Adafruit-SSD1306-display-designer/'>this</a> site. 
 </html>
 )";
 #include <Wire.h>
