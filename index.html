@@ -11,9 +11,11 @@
     <h1>ESP8266 Display Designer</h1>
     <p>Before you start, upload <a href="https://github.com/AudunKodehode/Adafruit-SSD1306-display-designer/blob/wifi/Adafruit_SSD1306_WIFI_Sandbox.ino/Adafruit_SSD1306_WIFI_Sandbox.ino.ino">this</a> code to ESP8266</p>
     <br>
+    <span id="ipaddressSpan"></span>
     <div class="ip">
-        <label for="ipaddressInput">IP:</label>
-        <input id="ipaddressInput" type="text" placeholder="IP-adress from ESP8266">
+        <label for="ipaddressInput"></label>
+        <br><br>
+        <input id="ipaddressInput" type="text" placeholder="IP-adress from ESP8266" value="10.0.0.17">
         <button onclick="setIP()">Set IP</button>
     </div>
 
