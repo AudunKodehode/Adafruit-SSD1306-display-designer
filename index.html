@@ -63,6 +63,11 @@
         <input type="text" id="textInput" placeholder="Text">
     </div>
 
+    <div class="flex">
+        <button onclick="setCursor()">Set Cursor</button>
+        <button onclick="setTextSize()">Set textSize</button>
+        <button onclick="setTextColor()">Set textColor</button>
+    </div>
 
       </div>
 
@@ -112,7 +117,7 @@
                 <label for="heightInput">Height</label>
                 <input type="number" id="heightInput" value="0" onchange="heightChange()"/>
             </div>
-
+<br>
             <div>
                 <label for="xInput">X0</label>
                 <input type="number" id="x0Input" value="0" onchange="x0Change()"/>
@@ -139,10 +144,6 @@
           
         
 
-      <div class="customCommands">
-        <input type="text" id="customCommandInput" placeholder="Custom command" />
-        <button id="customCommandSendButton" onclick="customCommand('customCommand')">Send</button>
-      </div>
 
 
 
@@ -169,6 +170,7 @@
             <div class="flex">
             <button onclick="clearSSD()" >Clear</button>
             <button onclick="copySSD()">Copy</button>
+            <button onclick="addSSD1306('display.display()')">Display</button>
         </div>
 
             <div id="ssd1306Code" class="ssd1306Code">

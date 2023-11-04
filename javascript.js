@@ -7,6 +7,7 @@ const requestOptions = {
 let screenWidth = "128";
 let screenHeight = "64";
 let color = "1";
+let colorString = "SSD1306_WHITE";
 let textSize = "1";
 let radius = "0";
 let x0 = "0";
@@ -19,6 +20,7 @@ let width = "0";
 let height = "0";
 let drawOrFill = "fill";
 let commandNumber = 0;
+let invert = true;
 
 const customCommandInput = document.getElementById("customCommandInput");
 const customCommandSendButton = document.getElementById(
@@ -85,9 +87,11 @@ function radio(type) {
   if (type == "color") {
     blackRadio.checked = false;
     color = "1";
+    colorString = "SSD1306_WHITE";
   } else if (type == "black") {
     colorRadio.checked = false;
     color = "0";
+    colorString = "SSD1306_BLACK";
   }
   if (type == "draw") {
     fillRadio.checked = false;
@@ -109,7 +113,7 @@ function heightChange() {
 }
 
 function textSizeSliderChange() {
-  textSizeSpan.textContent = "TextSize: " + textSizeSlider.value;
+  textSizeSpan.textContent = `TextSize: ${textSizeSlider.value}`;
   textSize = textSizeSlider.value.toString();
 }
 function x0Change() {
@@ -132,17 +136,34 @@ function y2Change() {
 }
 let lastCommand = "";
 
-customCommandInput.addEventListener("keyup", function (event) {
-  if (event.key === "Enter") {
-    customCommandSendButton.click();
 
-    lastCommand = customCommandInput.value;
-    customCommandInput.value = "";
+
+function addSSD1306(command) {
+    const newCommand = document.createElement("p");
+    ssd1306Code.appendChild(newCommand);
+    newCommand.id = commandNumber;
+    const deleteButton = document.createElement("button");
+    deleteButton.style.width = "20px";
+    deleteButton.style.height = "20px";
+    deleteButton.style.marginRight = "5px";
+    deleteButton.style.backgroundColor = "gray";
+    deleteButton.style.borderRadius = "5px";
+    deleteButton.addEventListener("mouseover", function () {
+      deleteButton.style.backgroundColor = "red";
+    });
+    deleteButton.addEventListener("mouseout", function () {
+      deleteButton.style.backgroundColor = "gray";
+    });
+  
+    deleteButton.className = "deleteButton";
+    deleteButton.onclick = function () {
+        ssd1306Code.removeChild(newCommand);
+    };
+    newCommand.appendChild(deleteButton);
+    let commandText = document.createTextNode(`${command};`);
+    newCommand.appendChild(commandText);
   }
-  if (event.key === "ArrowUp") {
-    customCommandInput.value = lastCommand;
-  }
-});
+
 
 function addCustom(command) {
   const newCommand = document.createElement("p");
@@ -166,7 +187,7 @@ function addCustom(command) {
     customCode.removeChild(newCommand);
   };
   newCommand.appendChild(deleteButton);
-  let commandText = document.createTextNode(command + ";");
+  let commandText = document.createTextNode(`${command};`);
   newCommand.appendChild(commandText);
 }
 
@@ -174,16 +195,21 @@ function command(command) {
   if (command == "cd") {
     command = "cd";
     addCustom(command);
+    addSSD1306(`display.clearDisplay()`);
   }
   if (command == "pixel") {
-    command = "dp" + x0 + "," + y0 + "," + color;
+    command = `dp${x0},${y0},${color}`;
     addCustom(command);
+    addSSD1306(`display.drawPixel(${x0},${y0},${colorString})`);
   }
   if (command == "line") {
-    command = "dl" + x0 + "," + y0 + "," + x1 + "," + y1 + "," + color;
+    command = `dl${x0},${y0},${x1},${y1},${color}`;
+    addSSD1306(`display.drawLine(${x0},${y0},${x1},${y1},${colorString})`);
     addCustom(command);
   }
   if (command == "invert") {
+    addSSD1306(`display.invertDisplay(${invert})`);
+    invert = !invert;
     command = "id";
     addCustom(command);
   }
@@ -194,8 +220,9 @@ function command(command) {
     } else {
       command = "dc";
     }
-    command += x0 + "," + y0 + "," + radius + "," + color;
+    command += `${x0},${y0},${radius},${color}`;
     addCustom(command);
+    addSSD1306(`display.${drawOrFill}Circle(${x0},${y0},${radius},${colorString})`);
   }
   if (command == "rectangle") {
     if (drawOrFill == "fill") {
@@ -203,9 +230,9 @@ function command(command) {
     } else {
       command = "dr";
     }
-    command +=
-      x0 + "," + y0 + "," + width + "," + height + "," + radius + "," + color;
+    command += `${x0},${y0},${width},${height},${radius},${color}`;
     addCustom(command);
+    addSSD1306(`display.${drawOrFill}Rectangle(${x0},${y0},${width},${height},${radius},${colorString})`);
   }
   if (command == "triangle") {
     if (drawOrFill == "fill") {
@@ -213,27 +240,46 @@ function command(command) {
     } else {
       command = "dt";
     }
-    command +=
-      x0 + "," + y0 + "," + x1 + "," + y1 + "," + x2 + "," + y2 + "," + color;
+    command += `${x0},${y0},${x1},${y1},${x2},${y2},${color}`;
     addCustom(command);
+    addSSD1306(`display.${drawOrFill}Triangle(${x0},${y0},${x1},${y1},${x2},${y2},${colorString})`);
   }
   if (command == "newLine") {
     command = "nl";
     addCustom(command);
+    addSSD1306(`display.println()`);
   }
   if (command == "newtext") {
+    if (textInput.value == "") {
+      return;
+    }
     command =
-      "nt" + x0 + "," + y0 + "," + color + "," + textSize + textInput.value;
+      `nt${x0},${y0},${color},${textSize}${textInput.value}`;
     addCustom(command);
+    addSSD1306(`display.setCursor(${x0},${y0})`);
+    addSSD1306(`display.setTextSize(${textSize})`);
+    addSSD1306(`display.setColor(${colorString})`);
+    addSSD1306(`display.println("${textInput.value}")`);
   }
   if (command == "printText") {
+    if (textInput.value == "") {
+      return;
+    }
     command =
-      "pt" + x0 + "," + y0 + "," + color + "," + textSize + textInput.value;
+    `pt${x0},${y0},${color},${textSize}${textInput.value}`;
     addCustom(command);
+    addSSD1306(`display.setCursor(${x0},${y0})`);
+    addSSD1306(`display.setTextSize(${textSize})`);
+    addSSD1306(`display.setColor(${colorString})`);
+    addSSD1306(`display.print("${textInput.value}")`);
   }
   if (command == "continueText") {
-    command = "ct" + textInput.value;
+    if (textInput.value == "") {
+        return;
+      }
+    command = `ct${textInput.value}`
     addCustom(command);
+    addSSD1306(`display.print("${textInput.value}")`);
   }
 
   const url = `http://${ipAddress}/command?command=${command}`;
@@ -264,12 +310,13 @@ function customCommand(command) {
 function setIP() {
   if (ipaddressInput.value != "") {
     ipAddress = ipaddressInput.value;
-    ipaddressSpan.textContent = "Set IP: " + ipAddress;
+    ipaddressSpan.textContent = `Set IP: ${ipAddress}`;
   }
 }
 function clearAll() {
   customCode.textContent = "";
   ssd1306Code.textContent = "";
+
 }
 function clearCustom() {
   customCode.textContent = "";
@@ -298,4 +345,14 @@ function copyCustom() {
   selection.addRange(range);
   document.execCommand("copy");
   selection.removeAllRanges();
+}
+
+function setCursor(){
+    addSSD1306(`display.setCursor(${x0},${y0})`);
+}
+function setTextSize(){
+    addSSD1306(`display.setTextSize(${textSize})`);
+}
+function setTextColor(){
+    addSSD1306(`display.setTextColor(${colorString})`);
 }
