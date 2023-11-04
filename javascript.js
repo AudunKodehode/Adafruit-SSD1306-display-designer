@@ -97,7 +97,6 @@ function radio(type) {
 
 function radiusChange() {
   radius = radiusInput.value.toString();
-  console.log(radius);
 }
 function widthChange(){
   width = widthInput.value.toString();
@@ -191,12 +190,11 @@ if (command == 'continueText'){
     command = 'ct' + textInput.value
 }
 
-  console.log(command);
 
   const url = `http://${ipAddress}/command?command=${command}`;
   fetch(url, requestOptions)
     .then((response) => {
-      if (!response.ok) {
+      if (response.ok) {
       }
     })
     .catch((error) => {});
@@ -205,7 +203,6 @@ function customCommand(command) {
   if ((command = "customCommand")) {
     command = customCommandInput.value;
   }
-  console.log("Custom command: " + command);
   const url = `http://${ipAddress}/command?command=${command}`;
   fetch(url, requestOptions)
     .then((response) => {
@@ -219,6 +216,5 @@ function setIP() {
   if (ipaddressInput.value != "") {
     ipAddress = ipaddressInput.value;
     ipaddressSpan.textContent = "Set IP: " + ipAddress;
-    console.log("IP set to: " + ipAddress);
   }
 }
