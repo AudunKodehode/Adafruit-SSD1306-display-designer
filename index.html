@@ -1,28 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css.css" />
     <script src="javascript.js" defer></script>
     <title>SSD1306 designer</title>
-</head>
-<body>
-    <h1>ESP8266 Display Designer</h1>
-    <p>Before you start, upload <a href="https://github.com/AudunKodehode/Adafruit-SSD1306-display-designer/blob/wifi/Adafruit_SSD1306_WIFI_Sandbox.ino/Adafruit_SSD1306_WIFI_Sandbox.ino.ino">this</a> code to ESP8266</p>
-    <br>
-    <span id="ipaddressSpan"></span>
-    <div class="ip">
-        <label for="ipaddressInput"></label>
-        <br><br>
-        <input id="ipaddressInput" type="text" placeholder="IP-adress from ESP8266" value="10.0.0.17">
-        <button onclick="setIP()">Set IP</button>
+  </head>
+  <body>
+    <div class="designer">
+      <h1>ESP8266 Display Designer</h1>
+      <h5>By <a href="https://github.com/AudunKodehode" target="_blank">AudunKodehode</a></h5>
+      <p>
+        Before you start, upload
+        <a
+          href="https://github.com/AudunKodehode/Adafruit-SSD1306-display-designer/blob/wifi/Adafruit_SSD1306_WIFI_Sandbox.ino/Adafruit_SSD1306_WIFI_Sandbox.ino.ino" target="_blank"
+          >this</a
+        >
+        code to ESP8266 after changing the Wi-Fi credentials
+      </p>
+      <br />
+      <span id="ipaddressSpan"></span>
+      <div class="ip">
+        <p>Make sure you're on the same network.</p>
+
+        <div>
+          <label for="ipaddressInput"></label>
+          <input
+            id="ipaddressInput"
+            type="text"
+            placeholder="IP-adress from ESP8266"
+            value="10.0.0.17"
+          />
+          <button onclick="setIP()">Set IP</button>
+        </div>
+
+        <div>
+          <label for="screenWidthInput">Screen Width</label>
+          <input type="number" id="screenWidthInput" value="128" min="1" onchange="screenWidthChange()"/>
+          <label for="screenHeightInput">Screen Height</label>
+          <input type="number" id="screenHeightInput" value="64" min="1" onchange="screenHeightChange()" />
+        </div>
+      </div>
+
+      <div class="buttons">
+        <div class="draw">
+        <button onclick="command('cd')">Clear</button>
+        <button onclick="command('invert')">Invert</button>
+        <button onclick="command('pixel')">Pixel</button>
+        <button onclick="command('line')">Line</button>
+        <button onclick="command('circle')">Circle</button>
+        <button onclick="command('rectangle')">Rectangle</button>
+        <button onclick="command('triangle')">Triangle</button>
+    </div>
+    <div class="write">
+        <button onclick="command('newtext')">Text w /nl</button>
+        <button onclick="command('printText')">Text wo /nl</button>
+        <button onclick="command('continueText')">Continue Text</button>
+        <button onclick="command('newLine')">New Line</button>
+    </div>
+    <div class="textInput">
+        <input type="text" id="textInput" placeholder="Text">
     </div>
 
-    <p>Make sure you're on the same network.</p>
-<button onclick="command('cd')">Clear Display</button>
+
+      </div>
+
+      <div class="controls">
+        <div>
+          <label for="blackRadio">Black</label>
+          <input type="radio" id="blackRadio" onclick="radio('black')" />
+          <label for="colorRadio">Color</label>
+          <input
+            type="radio"
+            id="colorRadio"
+            onclick="radio('color')"
+            checked
+          />
+        </div>
+        <div>
+          <label for="drawRadio">Draw</label>
+          <input type="radio" id="drawRadio" onclick="radio('draw')" />
+          <label for="fillRadio">Fill</label>
+          <input type="radio" id="fillRadio" onclick="radio('fill')" checked />
+        </div>
+
+
+          <div class="textSizeDiv">
+            <input
+              type="range"
+              min="1"
+              max="5"
+              value="1"
+              id="textSizeSlider"
+              onchange="textSizeSliderChange()"
+            />
+            <span id="textSizeSpan">TextSize: 1</span>
+          </div>
+
+          <div class="xyNumerics">
+
+
+            <div>
+                <label for="radiusInput">Radius</label>
+                <input type="number" id="radiusInput" value="0" onchange="radiusChange()" min="0"/>
+            </div>
+
+            <div>
+                <label for="widthInput">Width</label>
+                <input type="number" id="widthInput" value="0" onchange="widthChange()"/>
+                <label for="heightInput">Height</label>
+                <input type="number" id="heightInput" value="0" onchange="heightChange()"/>
+            </div>
+
+            <div>
+                <label for="xInput">X0</label>
+                <input type="number" id="x0Input" value="0" onchange="x0Change()"/>
+                <label for="yInput">Y0</label>
+                <input type="number" id="y0Input" value="0" onchange="y0Change()"/>
+            </div>
+            <div>
+                <label for="x1Input">X1</label>
+                <input type="number" id="x1Input" value="0" onchange="x1Change()"/>
+                <label for="y1Input">Y1</label>
+                <input type="number" id="y1Input" value="0" onchange="y1Change()"/>
+            </div>
+            <div>
+                <label for="x2Input">X2</label>
+                <input type="number" id="x2Input" value="0" onchange="x2Change()"/>
+                <label for="y2Input">Y2</label>
+                <input type="number" id="y2Input" value="0" onchange="y2Change()"/>
+            </div>
 
 
 
-</body>
+
+          </div>
+          
+        
+
+      <div class="customCommands">
+        <input type="text" id="customCommandInput" placeholder="Custom command" />
+        <button id="customCommandSendButton" onclick="customCommand('customCommand')">Send</button>
+      </div>
+
+
+
+
+    </div>
+  </body>
 </html>

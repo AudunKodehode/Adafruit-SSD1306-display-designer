@@ -1,11 +1,82 @@
-*{
-    box-sizing: border-box;
-    margin:0;
-    padding:0;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
-body{
-    background: gray;
+body {
+  background: gray;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
 }
-p{
-    font-size: 20px;
+.designer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+}
+.draw {
+    justify-content: center;
+    gap: 5px;
+    display: flex;
+}
+.write{
+    justify-content: center;
+    gap: 5px;
+    display: flex;
+}
+
+
+.controls{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+}
+.buttons {
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+.textInput{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+.ip {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.ip input{
+    width: 40px;
+}
+#ipaddressInput{
+    width: 130px;
+}
+.textSizeDiv{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+.xyNumerics{
+    display:flex;
+    flex-direction: column;
+}
+.xyNumerics * {
+    display: flex;
+    justify-content: center;
+}
+.xyNumerics input{
+    width: 40px;
+}
+button {
+    padding: 2px;
+}
+
+p {
+  font-size: 20px;
 }
