@@ -166,7 +166,7 @@ function addCustom(command) {
     customCode.removeChild(newCommand);
   };
   newCommand.appendChild(deleteButton);
-  let commandText = document.createTextNode(command);
+  let commandText = document.createTextNode(command + ";");
   newCommand.appendChild(commandText);
 }
 
