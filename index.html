@@ -148,5 +148,36 @@
 
 
     </div>
+    <button onclick="clearAll()">Clear all</button>
+    <div class="commands">
+        <div class="arduino">
+            <h1>Custom</h1>
+
+            <div class="flex">
+                <button onclick="clearCustom()">Clear</button>
+                <button onclick="copyCustom()">Copy</button>
+        </div>
+            <div id="customCode" class="customCode">
+
+
+            </div>
+        </div>
+        <div class="custom">
+
+
+            <h1>SSD1306</h1>
+            <div class="flex">
+            <button onclick="clearSSD()" >Clear</button>
+            <button onclick="copySSD()">Copy</button>
+        </div>
+
+            <div id="ssd1306Code" class="ssd1306Code">
+                
+            </div>
+        </div>
+        
+    </div>
+
+
   </body>
 </html>

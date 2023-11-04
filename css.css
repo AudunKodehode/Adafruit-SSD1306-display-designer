@@ -21,6 +21,9 @@ body {
     gap: 5px;
     display: flex;
 }
+h5{
+    font-size: 20px;
+}
 .write{
     justify-content: center;
     gap: 5px;
@@ -79,4 +82,33 @@ button {
 
 p {
   font-size: 20px;
+}
+.commands{
+    display:flex;
+}
+.arduino, .custom{
+    border: 1px solid black;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+}
+.flex{
+    display: flex;
+}
+.customCode, .ssd1306Code{
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding-right: 10px;
+height: 150px;
+overflow-y: scroll;
+}
+.arduino h1, .custom h1{
+    text-align: center;
+}
+.flex{
+    display: flex;
+    justify-content: center;
+    gap: 50px;
 }
