@@ -1,7 +1,7 @@
 .net WindowsForms app: 
 Application to design layout and style on SSD1306 along with Arduino code.
 
-<h2>Check out the Wifi-branch to use the app in browser.</h2>
+<h2>Check out the <a href="https://github.com/AudunKodehode/Adafruit-SSD1306-display-designer/tree/wifi">Wifi-branch</a> to use the app in browser.</h2>
 ![Alt Text](https://github.com/AudunKodehode/Adafruit-SSD1306-display-designer/raw/main/Preview.png)
 
 
